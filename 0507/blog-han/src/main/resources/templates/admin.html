@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org">
+
+<script>
+  function show_change_passwd() {
+    let passwd;
+
+    passwd = $("#change-passwd");
+    passwd.empty();
+    var form = $('<form method="post" id = "change_passwd" action="/login/change-password"></form>');
+    var out1 = $('<input type="password" name="oldPasswd">旧密码</input>');
+    form.append(out1);
+    form.append("<tr>");
+    var out2 = $('<input type="password" name="newPasswd">新密码</input>');
+    form.append(out2);
+    form.append($('<tr>'));
+    form.append($('<a href="/admin" class="btn btn-primary blog-post-create-btn">取消</a>'));
+    form.append($('<button type="submit" class="btn btn-primary blog-post-create-btn" >确定</button>'));
+    passwd.append(form);
+    console.log("to execute");
+    console.log(passwd);
+  }
+
+</script>
+
+
+<head lang="en">
+  <meta charset="UTF-8">
+  <title>账号管理</title>
+  <link rel="stylesheet" href="//cdn.bootcss.com/bootstrap/3.3.4/css/bootstrap.min.css">
+  <link rel="stylesheet" href="/css/footer.css">
+  <link rel="stylesheet" href="/css/blog.css">
+  <link rel="stylesheet" href="/css/admin.css">
+  <script src="//cdn.bootcss.com/jquery/1.11.2/jquery.min.js"></script>
+  <script src="//cdn.bootcss.com/bootstrap/3.3.4/js/bootstrap.min.js"></script>
+</head>
+
+<body>
+
+<!--/*@thymesVar id="message" type="java.lang.String"*/-->
+
+<div class="alert alert-success" th:unless="${#strings.isEmpty(message)}">
+  <p th:text="${message}"></p>
+</div>
+
+<!--/*@thymesVar id="user" type="club.banyuan.blog.bean.User"*/-->
+<div class="container">
+  <h2>用户名
+    <td th:text="${user.name}">"${user.name}"</td>
+  </h2>
+
+  <h2>
+    <div>创建blog
+      <a href="/admin/blog/create" class="btn btn-primary blog-post-create-btn">创建新博客</a>
+    </div>
+  </h2>
+
+  <div id="change-passwd">
+    <!-- 这里应该是一个按钮,用户点击后刷新这个地方,输入旧密码和新密码   -->
+    <button class="change-passwd-button" onclick='show_change_passwd()'>修改密码</button>
+  </div>
+  <h2>
+    忘记密码
+  </h2>
+
+  <h2>
+    <div>展示头像和修改头像
+      <tr></tr>
+      <!-- 用户头像的地址使用什么来获取 -->
+      <img th:src="'/avatar/' + ${user.name}">
+      <tr></tr>
+      <form method="POST" enctype="multipart/form-data" action="/upload">
+        File to upload: <input type="file" name="file"><br />
+        Name: <input type="text" name="name"><br /> <br />
+        <input type="submit" value="Upload"> Press here to upload the file!
+      </form>
+    </div>
+  </h2>
+
+  <h2>
+    <div>是否允许修改邮箱</div>
+  </h2>
+
+  <h2>
+    <div>blog管理
+      <a href="/admin/blogs" class="btn btn-primary blog-post-create-btn">管理blog</a>
+    </div>
+  </h2>
+
+  <h2>
+    <div>blog管理
+      <form method="post" action="/logout">
+        <button type="submit" class="btn btn-primary blog-post-create-btn" >log out</button>
+      </form>
+    </div>
+  </h2>
+</div>
+
+</body>
+
+</html>
