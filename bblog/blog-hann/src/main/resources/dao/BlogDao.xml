@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="club.banyuan.blog.dao.BlogDao">
+
+    <resultMap id="blogMap" type="club.banyuan.blog.bean.Blog" autoMapping="true">
+        <id property="id" column="id"></id>
+        <association property="author" column="user_id" resultMap="userMap" javaType="club.banyuan.blog.bean.User">
+            <id property="id" column="user_id"></id>
+        </association>
+    </resultMap>
+    <resultMap id="userMap" type="club.banyuan.blog.bean.User" autoMapping="true">
+        <id property="id" column="id"></id>
+    </resultMap>
+    <select id="findBlogById" resultMap="blogMap">
+        select blog.id , blog.title , blog.content , blog.created_time , blog.user_id , user.name , user.password , user.email
+        from blog left join user on blog.user_id = user.id  where blog.id = #{id}
+    </select>
+
+    <select id="findBlogsByUserId" resultMap="blogMap">
+        select blog.id , blog.title , blog.content , blog.created_time , blog.user_id , user.name , user.password , user.email
+        from blog left join user on blog.user_id = user.id  where user.id = #{userId}
+    </select>
+    <select id="selectAllBlogs" resultMap="blogMap">
+        select blog.id , blog.title , blog.content , blog.created_time , blog.user_id , user.name , user.password , user.email
+        from blog left join user on blog.user_id = user.id
+    </select>
+
+    <update id="saveBlog">
+        update blog set title = #{title}, content = #{content} where id = #{id}
+    </update>
+
+    <delete id="deleteBlog">
+        delete from blog where id = #{id}
+    </delete>
+
+    <insert id="insertBlog" parameterType="club.banyuan.blog.bean.Blog" >
+        <selectKey resultType="java.lang.Integer" order="AFTER" keyProperty="id">
+            select LAST_INSERT_ID()
+        </selectKey>
+        insert into blog (title, content, user_id)
+        value
+        (#{title}, #{content}, #{author.id})
+    </insert>
+</mapper>
